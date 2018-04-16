@@ -10,6 +10,7 @@ import com.androidvoyage.vocabhelper.R
 import android.app.PendingIntent
 import com.androidvoyage.vocabhelper.activities.HomeActivity
 import android.support.v4.app.NotificationManagerCompat
+import com.androidvoyage.vocabhelper.activities.AddWordActivity
 import com.androidvoyage.vocabhelper.database.AppDatabase
 import com.androidvoyage.vocabhelper.model.WordData
 import java.util.*
@@ -46,17 +47,21 @@ class ShowWordService : Service() {
 
     private fun getWord() {
         var listOfWords = AppDatabase.getAppDatabase(this).wordsDao().getAllWords();
-        if (listOfWords != null && listOfWords.size > 0) {
+        if (listOfWords != null && listOfWords.size > 1) {
             val random = Random()
-            val no = random.nextInt(listOfWords.size - 0 + 1) + 0
+            val no = random.nextInt((listOfWords.size - 1))
             showNotification(listOfWords[no])
+        }else{
+            showNotification(listOfWords[0])
         }
     }
 
     private fun showNotification(data: WordData) {
 
         // Create an explicit intent for an Activity in your app
-        val intent = Intent(this, HomeActivity::class.java)
+        val intent = Intent(this, AddWordActivity::class.java)
+        intent.putExtra("WordId", data.wordId)
+        intent.putExtra("From", "Notification")
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         val pendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
 

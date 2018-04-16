@@ -28,8 +28,6 @@ class HomeActivity : AppCompatActivity(), WordRVAdapter.ItemClickListner {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
-        setSupportActionBar(toolbar)
-
         fab.setOnClickListener { view ->
             startActivity(Intent(this, AddWordActivity::class.java))
         }
