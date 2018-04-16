@@ -44,22 +44,15 @@ class HomeActivity : AppCompatActivity(), WordRVAdapter.ItemClickListner {
     private fun loadSavedWords() {
         wordsList = AppDatabase.getAppDatabase(this).wordsDao().getAllWordsDec()
 
-        if (wordsList!=null && wordsList!!.size>0){
+        if (wordsList != null && wordsList!!.size > 0) {
             val rvAdapter = WordRVAdapter(this)
             rvAdapter.wordList = wordsList
             rvAdapter.listner = this
             wordsRV.layoutManager = LinearLayoutManager(this)
             wordsRV.adapter = rvAdapter
-
-
-            val cal = Calendar.getInstance()
-            cal.add(Calendar.SECOND, 10)
-            val intent = Intent(this, ShowWordService::class.java)
-            val pintent = PendingIntent.getService(this, 0, intent,
-                    0)
-            val alarm = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            alarm.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(),
-                    (36000 * 1000).toLong(), pintent)
+            startService(Intent(this, ShowWordService::class.java))
+        } else {
+            stopService(Intent(this, ShowWordService::class.java))
         }
     }
 

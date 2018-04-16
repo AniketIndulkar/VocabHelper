@@ -22,7 +22,11 @@
         <activity
             android:name=".activities.AddWordActivity"
             android:label="@string/title_activity_add_word"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <service
+            android:name=".service.ShowWordService"
+            android:enabled="true" />
     </application>
 
 </manifest>
