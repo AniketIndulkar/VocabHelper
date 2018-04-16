@@ -13,9 +13,15 @@ import com.androidvoyage.vocabhelper.model.WordData
 
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.content_home.*
+import android.app.AlarmManager
+import android.content.Context.ALARM_SERVICE
+import android.app.PendingIntent
+import android.content.Context
+import com.androidvoyage.vocabhelper.service.ShowWordService
+import java.util.*
+
 
 class HomeActivity : AppCompatActivity(), WordRVAdapter.ItemClickListner {
-
 
     var wordsList: List<WordData>? = null
 
@@ -37,11 +43,24 @@ class HomeActivity : AppCompatActivity(), WordRVAdapter.ItemClickListner {
 
     private fun loadSavedWords() {
         wordsList = AppDatabase.getAppDatabase(this).wordsDao().getAllWordsDec()
-        val rvAdapter = WordRVAdapter(this)
-        rvAdapter.wordList = wordsList
-        rvAdapter.listner = this
-        wordsRV.layoutManager = LinearLayoutManager(this)
-        wordsRV.adapter = rvAdapter
+
+        if (wordsList!=null && wordsList!!.size>0){
+            val rvAdapter = WordRVAdapter(this)
+            rvAdapter.wordList = wordsList
+            rvAdapter.listner = this
+            wordsRV.layoutManager = LinearLayoutManager(this)
+            wordsRV.adapter = rvAdapter
+
+
+            val cal = Calendar.getInstance()
+            cal.add(Calendar.SECOND, 10)
+            val intent = Intent(this, ShowWordService::class.java)
+            val pintent = PendingIntent.getService(this, 0, intent,
+                    0)
+            val alarm = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            alarm.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(),
+                    (36000 * 1000).toLong(), pintent)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
