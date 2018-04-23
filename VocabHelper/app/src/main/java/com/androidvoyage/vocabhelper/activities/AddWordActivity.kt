@@ -3,6 +3,7 @@ package com.androidvoyage.vocabhelper.activities
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.androidvoyage.vocabhelper.R
@@ -15,6 +16,7 @@ import java.util.*
 class AddWordActivity : AppCompatActivity() {
 
     var fromNotification: Boolean = false
+    var wordData: WordData? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,8 +29,8 @@ class AddWordActivity : AppCompatActivity() {
 
 
             if (fromNotification) {
-                if (intent.extras != null && intent.extras.containsKey("WordId")) {
-                    val wordId = intent.extras.getLong("WordId")
+                if (intent.extras != null && intent.extras.containsKey("NotiWordId")) {
+                    val wordId = intent.extras.getString("NotiWordId").toLong()
                     val wordData = AppDatabase.getAppDatabase(this).wordsDao().getWordsByID(wordId)
 
                     if (!wordData.word.equals(tvWord.text.toString())) {
@@ -64,12 +66,16 @@ class AddWordActivity : AppCompatActivity() {
 
                 }
             } else {
-                setDataToView()
+                if (wordData!=null){
+                    setDataToView(true)
+                }else{
+                    setDataToView(false)
+                }
             }
         }
     }
 
-    private fun setDataToView() {
+    private fun setDataToView(isUpdate : Boolean) {
         val wordData = WordData()
 
         if (tvWord.text.toString() != null && !tvWord.text.toString().equals(""))
@@ -90,7 +96,14 @@ class AddWordActivity : AppCompatActivity() {
         wordData.sentenceWithWord = tvSentence.text.toString()
         wordData.isDone = false
         wordData.createdAt = Date().time
-        AppDatabase.getAppDatabase(this).wordsDao().insertWord(wordData)
+
+        if (isUpdate){
+            AppDatabase.getAppDatabase(this).wordsDao().update(wordData)
+//            AppDatabase.getAppDatabase(this).wordsDao().updateWord(wordData.word,wordData.wordMeaning,wordData.wordSynonyms,wordData.sentenceWithWord,wordData.wordId)
+        }else{
+            AppDatabase.getAppDatabase(this).wordsDao().insertWord(wordData)
+        }
+
         finish()
     }
 
@@ -100,19 +113,16 @@ class AddWordActivity : AppCompatActivity() {
         if (intent.extras != null && intent.extras.containsKey("From")) {
             headerText.setText("What was the word ?")
             fromNotification = true
-
         } else {
             if (intent.extras != null && intent.extras.containsKey("WordId")) {
                 val wordId = intent.extras.getLong("WordId")
-                val wordData = AppDatabase.getAppDatabase(this).wordsDao().getWordsByID(wordId)
+                wordData = AppDatabase.getAppDatabase(this).wordsDao().getWordsByID(wordId)
 
-                tvWord.setText(wordData.word)
-                tvMeaning.setText(wordData.wordMeaning)
-                tvSynonyms.setText(wordData.wordSynonyms)
-                tvSentence.setText(wordData.sentenceWithWord)
+                tvWord.setText(wordData!!.word)
+                tvMeaning.setText(wordData!!.wordMeaning)
+                tvSynonyms.setText(wordData!!.wordSynonyms)
+                tvSentence.setText(wordData!!.sentenceWithWord)
             }
         }
-
-
     }
 }

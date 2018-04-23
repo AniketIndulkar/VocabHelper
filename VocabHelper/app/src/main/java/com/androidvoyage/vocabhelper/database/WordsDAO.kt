@@ -1,10 +1,7 @@
 package com.androidvoyage.vocabhelper.database
 
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Insert
-import android.arch.persistence.room.Query
+import android.arch.persistence.room.*
 import com.androidvoyage.vocabhelper.model.WordData
-import android.arch.persistence.room.Delete
 
 
 @Dao
@@ -24,6 +21,13 @@ interface WordsDAO {
 
     @Query("SELECT COUNT(*) from WORDS")
     fun getWordCount(): Int
+
+    @Query("UPDATE Words SET Word =:word ,Meaning = :meaning , Synonyms =:synonyms,Sentence = :sentence WHERE id = :wordId")
+    fun updateWord(word: String, meaning: String, synonyms: String, sentence: String, wordId: Long)
+
+
+    @Update
+    fun update(word: WordData): Int
 
     @Delete
     fun delete(wordData: WordData)

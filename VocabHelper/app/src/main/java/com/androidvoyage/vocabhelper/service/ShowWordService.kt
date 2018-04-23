@@ -37,10 +37,10 @@ class ShowWordService : Service() {
                 getWord()
                 Log.d("Runnnin", "Runnin " + count)
                 count++
-                handler.postDelayed(this, 15 * 60 * 1000) //now is every 15 minutes
+                handler.postDelayed(this, 10000) //now is every 15 minutes
             }
 
-        }, 15 * 60 * 1000)
+        }, 10000)
 
         return super.onStartCommand(intent, flags, startId)
     }
@@ -59,11 +59,13 @@ class ShowWordService : Service() {
     private fun showNotification(data: WordData) {
 
         // Create an explicit intent for an Activity in your app
-        val intent = Intent(this, AddWordActivity::class.java)
-        intent.putExtra("WordId", data.wordId)
+        var intent = Intent(this, AddWordActivity::class.java)
+        intent.putExtra("NotiWordId", data.wordId.toString())
         intent.putExtra("From", "Notification")
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        val pendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
+        intent.setAction(data.wordId.toString())
+        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+
+        val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 
         val mBuilder = NotificationCompat.Builder(this, "1111")
                 .setSmallIcon(R.drawable.notification_icon)
