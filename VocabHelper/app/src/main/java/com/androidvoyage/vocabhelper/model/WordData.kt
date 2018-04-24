@@ -23,6 +23,9 @@ class WordData {
     @ColumnInfo(name = "Sentence")
     var sentenceWithWord: String = ""
 
+    @ColumnInfo(name = "Antonymes")
+    var antonymes: String = ""
+
     @ColumnInfo(name = "IsDone")
     var isDone: Boolean = false
 
@@ -30,6 +33,6 @@ class WordData {
     var createdAt: Long = 0
 
     override fun toString(): String {
-        return word + " | " + wordMeaning + " | " + wordSynonyms + " | " + sentenceWithWord
+        return word + " | " + wordMeaning + " | " + wordSynonyms + " | " + sentenceWithWord+ " | " +antonymes
     }
 }

@@ -10,7 +10,7 @@ interface WordsDAO {
     @Query("SELECT * FROM Words")
     fun getAllWords(): List<WordData>
 
-    @Query("SELECT * FROM Words ORDER BY CreatedAt DESC")
+    @Query("SELECT * FROM Words ORDER BY Word ASC")
     fun getAllWordsDec(): List<WordData>
 
     @Query("SELECT * FROM Words WHERE id =:id")
@@ -22,9 +22,8 @@ interface WordsDAO {
     @Query("SELECT COUNT(*) from WORDS")
     fun getWordCount(): Int
 
-    @Query("UPDATE Words SET Word =:word ,Meaning = :meaning , Synonyms =:synonyms,Sentence = :sentence WHERE id = :wordId")
-    fun updateWord(word: String, meaning: String, synonyms: String, sentence: String, wordId: Long)
-
+    @Query("UPDATE Words SET Word =:word ,Meaning = :meaning , Synonyms =:synonyms, Antonymes =:antonymes,Sentence = :sentence WHERE id = :wordId")
+    fun updateWord(word: String, meaning: String, synonyms: String, antonymes: String, sentence: String, wordId: Long)
 
     @Update
     fun update(word: WordData): Int

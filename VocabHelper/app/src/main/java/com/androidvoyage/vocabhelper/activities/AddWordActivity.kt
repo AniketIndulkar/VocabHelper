@@ -3,7 +3,6 @@ package com.androidvoyage.vocabhelper.activities
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.androidvoyage.vocabhelper.R
@@ -26,7 +25,6 @@ class AddWordActivity : AppCompatActivity() {
         getIntentData()
 
         fab.setOnClickListener { view ->
-
 
             if (fromNotification) {
                 if (intent.extras != null && intent.extras.containsKey("NotiWordId")) {
@@ -66,42 +64,47 @@ class AddWordActivity : AppCompatActivity() {
 
                 }
             } else {
-                if (wordData!=null){
+                if (wordData != null) {
                     setDataToView(true)
-                }else{
+                } else {
                     setDataToView(false)
                 }
             }
         }
     }
 
-    private fun setDataToView(isUpdate : Boolean) {
-        val wordData = WordData()
+    private fun setDataToView(isUpdate: Boolean) {
+        var wordFinalData = WordData()
+        if (isUpdate) {
+            wordFinalData = wordData!!
+        } else {
+            wordFinalData.createdAt = Date().time
+        }
+
 
         if (tvWord.text.toString() != null && !tvWord.text.toString().equals(""))
-            wordData.word = tvWord.text.toString()
+            wordFinalData.word = tvWord.text.toString()
         else {
             Toast.makeText(this, "Enter Word ", Toast.LENGTH_LONG).show()
             return
         }
 
         if (tvMeaning.text.toString() != null && !tvMeaning.text.toString().equals(""))
-            wordData.wordMeaning = tvMeaning.text.toString()
+            wordFinalData.wordMeaning = tvMeaning.text.toString()
         else {
             Toast.makeText(this, "Enter meaning ", Toast.LENGTH_LONG).show()
             return
         }
 
-        wordData.wordSynonyms = tvSynonyms.text.toString()
-        wordData.sentenceWithWord = tvSentence.text.toString()
-        wordData.isDone = false
-        wordData.createdAt = Date().time
+        wordFinalData.wordSynonyms = tvSynonyms.text.toString()
+        wordFinalData.sentenceWithWord = tvSentence.text.toString()
+        wordFinalData.antonymes = tvAntonyms.text.toString()
+        wordFinalData.isDone = false
 
-        if (isUpdate){
-            AppDatabase.getAppDatabase(this).wordsDao().update(wordData)
-//            AppDatabase.getAppDatabase(this).wordsDao().updateWord(wordData.word,wordData.wordMeaning,wordData.wordSynonyms,wordData.sentenceWithWord,wordData.wordId)
-        }else{
-            AppDatabase.getAppDatabase(this).wordsDao().insertWord(wordData)
+        if (isUpdate) {
+            AppDatabase.getAppDatabase(this).wordsDao().updateWord(wordFinalData.word, wordFinalData.wordMeaning, wordFinalData.wordSynonyms,wordFinalData.antonymes, wordFinalData.sentenceWithWord, wordFinalData.wordId)
+        } else {
+            AppDatabase.getAppDatabase(this).wordsDao().insertWord(wordFinalData)
         }
 
         finish()
@@ -122,7 +125,13 @@ class AddWordActivity : AppCompatActivity() {
                 tvMeaning.setText(wordData!!.wordMeaning)
                 tvSynonyms.setText(wordData!!.wordSynonyms)
                 tvSentence.setText(wordData!!.sentenceWithWord)
+                tvAntonyms.setText(wordData!!.antonymes)
             }
         }
+    }
+
+
+    override fun onBackPressed() {
+        fab.callOnClick()
     }
 }

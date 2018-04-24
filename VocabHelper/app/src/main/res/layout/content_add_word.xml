@@ -28,6 +28,8 @@
         android:layout_marginTop="10dp"
         android:background="#FFFFFF"
         android:hint="Write word here!!"
+        android:inputType="text"
+        android:maxLines="1"
         android:paddingBottom="10dp"
         android:paddingTop="10dp"
         android:textSize="16sp" />
@@ -41,6 +43,8 @@
         android:layout_marginTop="10dp"
         android:background="#FFFFFF"
         android:hint="Meaning"
+        android:inputType="text"
+        android:maxLines="1"
         android:paddingBottom="10dp"
         android:paddingTop="10dp"
         android:textSize="16sp" />
@@ -55,6 +59,23 @@
         android:layout_marginTop="10dp"
         android:background="#FFFFFF"
         android:hint="Synonyms"
+        android:inputType="text"
+        android:maxLines="1"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:textSize="16sp" />
+
+    <EditText
+        android:id="@+id/tvAntonyms"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvSynonyms"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:background="#FFFFFF"
+        android:hint="Antonymes"
+        android:inputType="text"
+        android:maxLines="1"
         android:paddingBottom="10dp"
         android:paddingTop="10dp"
         android:textSize="16sp" />
@@ -63,11 +84,13 @@
         android:id="@+id/tvSentence"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvSynonyms"
+        android:layout_below="@+id/tvAntonyms"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="10dp"
         android:background="#FFFFFF"
         android:hint="Sentence"
+        android:inputType="text"
+        android:maxLines="5"
         android:paddingBottom="10dp"
         android:paddingTop="10dp"
         android:textSize="16sp" />
@@ -77,8 +100,8 @@
         android:id="@+id/relativeSuccess"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
-        android:background="#FFFFFF">
+        android:background="#FFFFFF"
+        android:visibility="gone">
 
 
         <ImageView

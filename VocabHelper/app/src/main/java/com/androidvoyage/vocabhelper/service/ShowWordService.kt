@@ -37,10 +37,10 @@ class ShowWordService : Service() {
                 getWord()
                 Log.d("Runnnin", "Runnin " + count)
                 count++
-                handler.postDelayed(this, 10000) //now is every 15 minutes
+                handler.postDelayed(this, 15*60*1000) //now is every 15 minutes
             }
 
-        }, 10000)
+        }, 15*60*1000)
 
         return super.onStartCommand(intent, flags, startId)
     }
