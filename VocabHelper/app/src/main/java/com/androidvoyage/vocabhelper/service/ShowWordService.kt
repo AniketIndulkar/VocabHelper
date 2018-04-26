@@ -35,7 +35,6 @@ class ShowWordService : Service() {
             override fun run() {
 
                 getWord()
-                Log.d("Runnnin", "Runnin " + count)
                 count++
                 handler.postDelayed(this, 15*60*1000) //now is every 15 minutes
             }
@@ -57,7 +56,6 @@ class ShowWordService : Service() {
     }
 
     private fun showNotification(data: WordData) {
-
         // Create an explicit intent for an Activity in your app
         var intent = Intent(this, AddWordActivity::class.java)
         intent.putExtra("NotiWordId", data.wordId.toString())

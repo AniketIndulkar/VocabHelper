@@ -102,7 +102,7 @@ class AddWordActivity : AppCompatActivity() {
         wordFinalData.isDone = false
 
         if (isUpdate) {
-            AppDatabase.getAppDatabase(this).wordsDao().updateWord(wordFinalData.word, wordFinalData.wordMeaning, wordFinalData.wordSynonyms,wordFinalData.antonymes, wordFinalData.sentenceWithWord, wordFinalData.wordId)
+            AppDatabase.getAppDatabase(this).wordsDao().updateWord(wordFinalData.word, wordFinalData.wordMeaning, wordFinalData.wordSynonyms, wordFinalData.antonymes, wordFinalData.sentenceWithWord, wordFinalData.wordId)
         } else {
             AppDatabase.getAppDatabase(this).wordsDao().insertWord(wordFinalData)
         }
@@ -132,6 +132,10 @@ class AddWordActivity : AppCompatActivity() {
 
 
     override fun onBackPressed() {
-        fab.callOnClick()
+        if (!tvWord.text.toString().contentEquals("")) {
+            fab.callOnClick()
+        } else {
+            super.onBackPressed()
+        }
     }
 }
